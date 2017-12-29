@@ -1,3 +1,6 @@
+### TODO - Test parseSudo funcs
+### If your system can`t find termcolor run "sudo pip install termcolor"
+
 ### IMPORTS
 
 import os
@@ -12,13 +15,12 @@ from pwd import getpwnam
 
 ### VARIABLES
 
-# verion description
-# 1st number - full-functionally working status< change it if script is STABLE AND RUN ALL ITS FEATURES 
-# 2nd number - version of half-functional script f.e. work with OS to catch 
-#              file permissions or controlling features of some Application
-# 3st number - count of middle important changes of script f.e. reading from file or generating .html reports
+# version description
+# 1st number - full-functionally working status <- change it if script is STABLE AND RUN ALL ITS FEATURES 
+# 2nd number - count functional changes f.e. work with OS to catch 
+#              file permissions, controlling features of some Application, reading from file or generating .html reports
 
-appInfo = ["PMatrix", "v0.1.7"]
+appInfo = ["PMatrix", "v0.8"]
 helpCommands = ["show help", "-h", "h", "help", "?", "-?"]
 permissions = {
           '7' : 'RWX',
@@ -36,7 +38,7 @@ permissions = {
 def title():
     os.system('clear')
     print colored("\n /------------|  " + appInfo[0]+ "  |------------\ ", 'red', attrs=['blink'])
-    print colored(" \____________|  " + appInfo[1] + "   |____________/ ", 'red', attrs=['blink'])
+    print colored(" \____________|  " + appInfo[1] + "     |____________/ ", 'red', attrs=['blink'])
 
 def showTitle():
     print("\n-------------|_O_|-------------")
@@ -52,11 +54,12 @@ def showHelp():
     print colored("2. To view help file use 'show help', '-h', 'help', '-?', '?' command.", 'white')
     print colored("3. To check current directory type 'show directory' command.", 'white')
     print colored("4. To check 'os.get' possibilities type 'check user' command.", 'white')
-    print colored("5. To check access of some user to some file or dir type 'check permissions <user> <dir/file>' command.")
+    print colored("5. To check access of some user to some file or dir type 'check permissions <user> <dir/file>' command.", 'white')
+    print colored("6. To check access of users list to some list of files or dirs type 'check permissions <list_of_users.txt> <list_of_objects.txt>'  command*.\n\n   *Txt files must contain user names (one user per row) \n    and full paths to objects (one per row)", 'white')
 
 def checkCwd():
     #print colored('os.get_exec_path ' + os.get_exec_path(), 'cyan')
-    print colored('os.getcwd   - ' + os.getcwd(), 'cyan')
+    print colored('\nos.getcwd   - ' + os.getcwd(), 'cyan')
     #print colored('os.getenv ' + os.getenv(), 'cyan')
     print colored('os.getlogin - ' + os.getlogin(), 'cyan')
     #print colored('os.getpid ' + os.getpid(), 'cyan')
@@ -102,12 +105,12 @@ def checkAccess(inputLine):
     else:
         print colored("User is NOT owner!", 'cyan')
         
-    if (userInOwnerGroup and userIsOwner == False):
+    if (userInOwnerGroup and not userIsOwner):
         print colored("User in owner group!", 'cyan')
         userPermissions = permissions[directoryPermissions[4]] 
         print colored("User permissions - " + userPermissions, 'cyan')
 
-    if (userInOwnerGroup == False and userIsOwner == False):
+    if (not userInOwnerGroup and not userIsOwner):
         print colored("User is NOT in owner group!", 'cyan')
         userPermissions = permissions[directoryPermissions[5]] 
         print colored("User permissions - " + userPermissions, 'cyan')
@@ -133,9 +136,9 @@ def checkAccessLite(user, directory):
 
     if userIsOwner:
         userPermissions = permissions[directoryPermissions[3]] 
-    if (userInOwnerGroup and userIsOwner == False):
+    if (userInOwnerGroup and not userIsOwner):
         userPermissions = permissions[directoryPermissions[4]] 
-    if (userInOwnerGroup == False and userIsOwner == False):
+    if (not userInOwnerGroup and not userIsOwner):
         userPermissions = permissions[directoryPermissions[5]] 
     return userPermissions
 
@@ -237,6 +240,7 @@ inputCom = ''
 title()
 
 while input != "exit":
+
     inputComSrc = getUserInput()
 
     if len(inputComSrc.split(" ")) == 2:
@@ -249,7 +253,10 @@ while input != "exit":
         inputArgs = inputComSrc.split(" ")[2] + " " + inputComSrc.split(" ")[3] + " "+ inputComSrc.split(" ")[4]
    
     if len(inputComSrc) > 2:
-        inputCom = inputComSrc.split(" ")[0] + " " + inputComSrc.split(" ")[1]
+        try:
+            inputCom = inputComSrc.split(" ")[0] + " " + inputComSrc.split(" ")[1]
+        except:
+            inputCom = inputComSrc
 
     if len(inputComSrc) == 1:
         inputCom = inputComSrc[0]
@@ -288,6 +295,3 @@ while input != "exit":
     if inputCom == "exit":
         print("Exiting...")
         sys.exit()
-
-    
-    
