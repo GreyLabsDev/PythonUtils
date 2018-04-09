@@ -19,7 +19,13 @@ This example creates html table with users from users.txt file and their permiss
 
 
 ### Screenshots:
+**Interface**
 
+![screenshoot](https://github.com/GreyLabsDev/PythonUtils/blob/master/command.png)
+
+**Result**
+
+![screenshoot](https://github.com/GreyLabsDev/PythonUtils/blob/master/result.png)
 
 ## augmentDatasets.py
 This script creating randomly augmented/distorted images for machine learning tasks.
